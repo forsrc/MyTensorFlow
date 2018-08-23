@@ -8,7 +8,6 @@ import org.tensorflow.TensorFlow;
 
 public class HelloTF {
     public static void main(String[] args) throws Exception {
-        System.setProperty("TF_CPP_MIN_LOG_LEVEL", "2");
         try (Graph g = new Graph()) {
             final String value = "Hello from " + TensorFlow.version();
 
@@ -21,10 +20,10 @@ public class HelloTF {
 
             // Execute the "MyConst" operation in a Session.
             try (Session s = new Session(g);
+                 // Generally, there may be multiple output tensors, all of them must be closed to prevent resource leaks.
                  Tensor output = s.runner().fetch("MyConst").run().get(0)) {
                 System.out.println(new String(output.bytesValue(), "UTF-8"));
             }
         }
-
     }
 }
